@@ -1,0 +1,245 @@
+"label","label_description","availability","uri","title","description","last_update","organization","group"
+"FINESS","Liste des établissements du domaine sanitaire et social.
+
+A partir des données Finess publiés mensuellement par Ministère de la Santé, l'équipe de data.gouv.fr propose une nouvelle façon d'accéder aux données, sous la forme d'un seul fichier agrégé.","available","https://www.data.gouv.fr/datasets/reexposition-des-donnees-finess","Réexposition des données Finess","A partir des jeux de données Finess publiés mensuellement par [Ministère de la Santé](https://www.data.gouv.fr/organizations/ministere-des-solidarites-et-de-la-sante/), l'équipe de data.gouv.fr propose une nouvelle façon d'accéder aux données, sous la forme de fichiers uniques et restructurés. Vous pouvez retrouver la documentation ainsi que l'ensemble des précautions liées aux données dans les descriptions des jeux de données d'origine. Pour toute question concernant le contenu des données, nous vous invitons à poser vos questions sur les jeux de données sources. Les données sont identiques aux données d'origine, seule la structure est retravaillée.
+
+Les données sont mises à jour automatiquement lorsque les données sources le sont, et le [code de mise à jour est ouvert](https://github.com/datagouv/datagouvfr_data_pipelines/tree/main/data_processing/sante/finess). Les données sont disponibles aux formats csv et parquet (cf l'onglet ""Téléchargement"" des ressources).
+
+Les jeux de données sources sont :
+- [établissements](https://www.data.gouv.fr/datasets/finess-extraction-du-fichier-des-etablissements/)
+- [entités juridiques](https://www.data.gouv.fr/datasets/finess-extraction-des-entites-juridiques/)
+- [autorisations d'activités de soin](https://www.data.gouv.fr/datasets/finess-extraction-des-autorisations-dactivites-de-soins/)
+- [équipements sociaux et médico-sociaux](https://www.data.gouv.fr/datasets/finess-extraction-des-equipements-sociaux-et-medico-sociaux/)
+- [équipements matériels lourds](https://www.data.gouv.fr/datasets/finess-extraction-des-equipements-materiels-lourds/)
+- [disciplines d'enseignement](https://www.data.gouv.fr/datasets/finess-extraction-des-disciplines-denseignement/)","2026-01-10T06:01:13+00:00","data.gouv.fr","Données sur l'offre et la demande de soins"
+"Alignement FINESS vers BAN et RNB","Proposition d'alignement du FINESS vers la Base Adresse Nationale (BAN) et le Référentiel National des Bâtiments (RNB).","available","https://www.data.gouv.fr/datasets/finess-alignement-vers-ban-et-rnb","FINESS : Alignement vers BAN et RNB","Proposition d'alignement du FINESS vers la Base Adresse Nationale (BAN) et le Référentiel National des Bâtiments (RNB)
+Fait avec LibreDataHub.org
+
+Sources des données
+- FINESS : fichier national des établissements sanitaires et sociaux
+- RNB : référentiel national des bâtiments
+- BAN : utilisation de l'API officielle de la Base Adresse Nationale
+","2025-05-03T20:29:26.937000+00:00","InterHop","Données sur l'offre et la demande de soins"
+"FINESS - Extraction des équipements sociaux et médico-sociaux","Liste des équipements sociaux et médico-sociaux.","available","https://www.data.gouv.fr/datasets/finess-extraction-des-equipements-sociaux-et-medico-sociaux","FINESS Extraction des équipements sociaux et médico-sociaux","Liste des équipements sociaux et médico-sociaux :
+
+Une nouvelle version de FINESS sera déployée à l'été 2026. En conséquence la génération de ce flux sera arrêtée et il n'y aura plus de mises à jour à partir de cette date.
+
+Un nouveau flux proposera les mêmes services, augmenté des nouveaux concepts métiers FINESS. Ce flux sera disponible sur l'espace [Organisation - Agence du Numérique en Santé | data.gouv.fr](https://fra01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.data.gouv.fr%2Forganizations%2Fagence-du-numerique-en-sante\&data=05%7C02%7CThierry.NGO-DURAND.EXT%40esante.gouv.fr%7C93452a6c39bf4c8ec29d08de59b6caf3%7C508449d3d632429b97cef8ad22b3a7e7%7C0%7C0%7C639046838778646229%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C\&sdata=o%2F0Bv1MlKh8jjf9qXi36xEi%2FB6Hx9CaFrMZwMy4k8%2Fk%3D\&reserved=0 ""URL d'origine: https://www.data.gouv.fr/organizations/agence-du-numerique-en-sante. Cliquez ou appuyez si vous faites confiance à ce lien."")
+
+Les spécifications de ce flux sont disponibles sur Github : [ansforge/finess](https://fra01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fansforge%2Ffiness\&data=05%7C02%7CThierry.NGO-DURAND.EXT%40esante.gouv.fr%7C93452a6c39bf4c8ec29d08de59b6caf3%7C508449d3d632429b97cef8ad22b3a7e7%7C0%7C0%7C639046838778677906%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C\&sdata=aMnlUIOHKKJUs%2F5rO63EiF26k7Q3cQ2M%2FnWmoS7npek%3D\&reserved=0 ""URL d'origine: https://github.com/ansforge/finess. Cliquez ou appuyez si vous faites confiance à ce lien."")
+
+Nous vous invitons par conséquent à migrer vers ce nouveau flux.
+
+Cordialement, équipe Finess.
+
+Le 30/12/2016 : Modification du format de fichier :
+Ajout des rubriques indsupinst, indsupaut, datemajaut et datemajinst  pour permettre le filtre des installations et des autorisations supprimées.
+Le 10/01/2017 : Suite à l'instruction DGCS/2016/300 relative à la prise en compte dans la gestion du FINESS des modifications apportées par la loi n°2015-1776 du 28 décembre 2015, les capacités sur la catégorie 202 ""résidences autonomie"" s'expriment en nombre de places et plus en nombre de logements.
+Le 28/09/2018 : Intitulés de la rubrique sourceinfo :
+9	Indéterminée
+V	Visite de conformité
+D	Document de tarification
+E	Enquête statistique
+A	Autre
+I	Interrogation de l'ET
+C	Convention
+R	Arrêté
+S	Inspection
+L	Labellisation
+","2026-01-08T15:48:43.130000+00:00","Ministère des Solidarités et de la Santé","Données sur l'offre et la demande de soins"
+"Open Finess","-","available","https://www.data.gouv.fr/datasets/open-finess","Open FINESS","Export maintenu conjointe par les associations InterHop et Toobib.
+Export des données présentes sur carto.toobib.org
+Maintien des données grâce à une communauté de volontaires.","2025-03-27T22:07:59.739000+00:00","InterHop","Données sur l'offre et la demande de soins"
+"Alignement RPPS vers BAN et RNB","Proposition d'alignement des coordonnées des structures d'exercice (Répertoire Partagé des Professionnels intervenant dans le système de Santé) vers la Base Adresse Nationale (BAN) et le Référentiel National des Bâtiments (RNB).","available","https://www.data.gouv.fr/datasets/rpps-alignement-vers-ban-et-rnb","RPPS : Alignement vers BAN et RNB","Proposition d'alignement des coordonnées des structures d'exercice vers la Base Adresse Nationale (BAN) et le Référentiel National des Bâtiments (RNB)
+Fait avec LibreDataHub.org
+
+Sources des données
+- RPPS : Extraction en libre accès de annuaire.sante.fr
+- RNB : Référentiel national des bâtiments
+- BAN : utilisation de l'API officielle de la Base Adresse Nationale","2025-03-02T11:36:15.755000+00:00","InterHop","Données sur l'offre et la demande de soins"
+"Accessibilité potentielle localisée (APL)","L’indicateur d’accessibilité potentielle localisée (APL) a été développé pour mesurer l’adéquation spatiale entre l’offre et la demande de soins de premier recours à un échelon géographique fin.","available","https://www.data.gouv.fr/datasets/laccessibilite-potentielle-localisee-apl","L'accessibilité potentielle localisée (APL)","L’indicateur d’accessibilité potentielle localisée (APL) a été développé pour mesurer l’adéquation spatiale entre l’offre et la demande de soins de premier recours à un échelon géographique fin. C'est un indicateur local, disponible au niveau de chaque commune, qui tient compte de l’offre et de la demande issues des communes environnantes. Calculé à l’échelle communale, l’APL met en évidence des disparités d’offre de soins qu’un indicateur usuel de densité, calculé sur des mailles beaucoup plus larges aurait tendance à masquer. Il tient également compte du niveau d’activité des professionnels en exercice ainsi que de la structure par âge de la population de chaque commune qui influence les besoins de soins.
+
+Accéder à l'application shiny : <https://drees.shinyapps.io/carto-apl/>[](https://drees.shinyapps.io/carto-apl/)
+
+**Consulter également :**[Accessibilité aux soins de premier recours en 2023. ](https://drees.solidarites-sante.gouv.fr/communique-de-presse-jeux-de-donnees/jeux-de-donnees/241220_DATA_accessibilite-aux-soins)[Dégradation de l’accessibilité aux médecins généralistes et aux infirmières, amélioration de l’accessibilité aux kinésithérapeutes, aux sages-femmes et aux chirurgiens-dentistes](https://drees.solidarites-sante.gouv.fr/communique-de-presse-jeux-de-donnees/jeux-de-donnees/241220_DATA_accessibilite-aux-soins)","2020-03-02T00:00:00+00:00","Ministère des Solidarités et de la Santé","Données sur l'offre et la demande de soins"
+"Données de population","-","available","https://www.data.gouv.fr/datasets/population","Population","Ce jeu de données permet d'accéder aux résultats des recensements de la population, à des séries chronologiques de la Banque de Données Macro-économiques de l'Insee sur le thème de la population et à d'autres données issues notamment des statistiques de l'état civil. 
+
+Le recensement de la population permet de connaître la diversité et l'évolution de la population de la France. L'Insee fournit ainsi des statistiques sur les habitants et les logements, leur nombre et leurs caractéristiques : répartition par sexe et âge, professions, diplômes-formation, conditions de logement, modes de transport, déplacements domicile-travail, etc.
+
+La BDM est la principale base de données de séries et indices sur l'ensemble des domaines économiques et sociaux. 
+
+","2026-02-11T14:15:34.313000+00:00","Institut national de la statistique et des études économiques (Insee)","Données sur les déterminants sociaux de la santé"
+"Revenus, pauvreté et niveau de vie - Données carroyées","Ces statistiques locales permettent d’observer finement la situation socio-économique de la population de zones géographiques très ciblées.","available","https://www.data.gouv.fr/datasets/revenus-pauvrete-et-niveau-de-vie-donnees-carroyees","Revenus, pauvreté et niveau de vie - Données carroyées","L'Insee fournit des informations socio-économiques sur près de 30 millions de ménages. Il diffuse ces informations à différentes échelles dont la plus petite est celle d’un carreau de 200 mètres de côté.
+
+Ces statistiques locales permettent d’observer finement la situation socio-économique de la population de zones géographiques très ciblées. Elles représentent une source d’information précieuse pour aller au-devant des besoins des habitants et des acteurs économiques et accompagner la mise en œuvre de politiques publiques.
+
+Ces données proviennent du dispositif sur les revenus localisés sociaux et fiscaux (**FiLoSoFi**).
+
+- Les bases contiennent des variables sur la structure par âge des individus, sur les caractéristiques des ménages et des logements et sur les revenus perçus au cours de l’année. Le champ géographique est constitué de la France métropolitaine, de la Martinique et de La Réunion.
+- Le carroyage est une technique de quadrillage consistant à découper le territoire en carreaux pour y diffuser de l’information statistique à un niveau faiblement agrégé. Le maillage du territoire qui en résulte est plus ou moins fin selon la taille de carreau choisie. Le carroyage nécessite de disposer initialement de données pour lesquelles on connaît précisément la position géographique de chaque observation.
+- Les carreaux permettent de s’affranchir des limites administratives habituelles et peuvent être assemblés pour construire ou approcher n’importe quel zonage à façon. L’information statistique sur un tel zonage peut ensuite être facilement retrouvée en rassemblant les données des carreaux qui le constituent. Les carreaux ont également l’avantage d’être stables au fil du temps.
+- Chaque fichier compacté (format zip) contient les données pour les trois zones géographiques du champ (France métropolitaine, Martinique et La Réunion). Trois formats de fichier sont proposés : shapefile, geopackage ou csv.
+- Tous les indicateurs fournis sont par ailleurs visualisables sous forme de cartes interactives sur deux plateformes : l'espace [cartographie infracommunale](https://www.insee.fr/fr/outil-interactif/7737357/index.html) de l’Insee et le [Géoportail de l'IGN](https://www.geoportail.gouv.fr/thematiques/economie-et-statistique). 
+      
+Il est conseillé de **lire attentivement la documentation** complète sur ces données carroyées avant leur utilisation. En particulier, il est recommandé de ne pas faire d’évolution temporelle entre différents millésimes de données carroyées en raison de ruptures de séries concernant l’évolution de la source et de la qualité de géolocalisation.","2026-02-11T17:38:49.437000+00:00","Institut national de la statistique et des études économiques (Insee)","Données sur les déterminants sociaux de la santé"
+"Revenus et pauvreté des ménages aux niveaux national et local - Revenus localisés sociaux et fiscaux (niveau de vie, taux de pauvreté)","-","available","https://www.data.gouv.fr/datasets/ensemble-de-jeux-de-donnees-relatifs-aux-indicateurs-de-niveau-de-vie-dinegalite-et-de-pauvrete-du-niveau-national-et-infra-departemental","Ensemble de jeux de données relatifs aux indicateurs de niveau de vie, d’inégalité et de pauvreté du niveau national et infra-départemental","Le dispositif Fichier Localisé Social et Fiscal (Filosofi) a été mis en œuvre afin de disposer d'indicateurs de niveau de vie, d'inégalité et de pauvreté à un niveau local infra-départemental. Il remplace les dispositifs Revenus Fiscaux Localisés (RFL) et Revenus Disponibles Localisés (RDL) depuis 2012.
+
+Les jeux de données provenant du catalogue de données de l'Insee sont disponibles sur les pages suivantes :
+
+<https://www.data.gouv.fr/datasets/principaux-indicateurs-sur-la-pauvrete-en-2021-niveau-de-vie-taux-de-pauvrete-part-des-menages-imposes-et-decomposition-du-revenu-disponible/>
+<https://www.data.gouv.fr/datasets/niveau-de-vie-median-et-taux-de-pauvrete-par-statut-doccupation-du-logement/>
+<https://www.data.gouv.fr/datasets/niveau-de-vie-median-et-taux-de-pauvrete-par-tranche-dage-du-referent-fiscal/>
+<https://www.data.gouv.fr/datasets/niveau-de-vie-median-et-taux-de-pauvrete-par-type-de-menage/>
+","2026-01-28T05:11:06.665000+00:00","Institut national de la statistique et des études économiques (Insee)","Données sur les déterminants sociaux de la santé"
+"Effectif de patients par pathologie, sexe, classe d'âge et territoire (département ou région)","Les données présentent des informations sur les effectifs de patients pris en charge par l'ensemble des régimes d'assurance maladie. Elles sont disponibles par pathologie, traitement chronique ou épisode de soins, sexe, classe d’âge, région et département.","available","https://www.data.gouv.fr/datasets/pathologies-effectif-de-patients-par-pathologie-sexe-classe-dage-et-territoire-departement-region","Pathologies : effectif de patients par pathologie, sexe, classe d'âge et territoire (département, région)","Ce jeu de données est une des sources de datavisualisations disponibles sur le site [Data pathologies](https://data.ameli.fr/pages/data-pathologies/).
+
+### Informations générales :
+
+Les données présentent des informations sur les effectifs de patients pris en charge par l'ensemble des régimes d'assurance maladie. Elles sont disponibles par pathologie, traitement chronique ou épisode de soins, sexe, classe d’âge, région et département.
+
+Les pathologies, traitements chroniques et épisodes de soins sont regroupés dans les catégories suivantes :
+
+  * maladies cardioneurovasculaires ;
+  * traitements du risque vasculaire (hors pathologies) ;
+  * diabète ;
+  * cancers ;
+  * pathologies psychiatriques ;
+  * traitements psychotropes (hors pathologies) ;
+  * maladies neurologiques ;
+  * maladies respiratoires chroniques (hors mucoviscidose) ;
+  * maladies inflammatoires ou rares ou infection VIH ;
+  * insuffisance rénale chronique terminale ;
+  * maladies du foie ou du pancréas (hors mucoviscidose) ;
+  * affections de longue durée (dont 31 et 32) pour d'autres causes ;
+  * hospitalisation pour Covid-19 (à partir de 2020) ;
+  * maternité (avec ou sans pathologies) ;
+  * traitement antalgique ou anti-inflammatoire (hors pathologies, traitements, maternité ou hospitalisations) ;
+  * hospitalisations hors pathologies repérées (avec ou sans pathologies, traitements ou maternité).
+
+
+
+Les dépenses remboursées des personnes qui ne présentent aucune des pathologies, traitements chroniques ou épisodes de soins mentionnés ci-dessus sont également présentées, ainsi que celles attribuées à la consommation courante de soins pour l’ensemble de la population de la cartographie des pathologies et des dépenses de l'Assurance Maladie.
+
+La prévalence correspondante est également présentée dans les données. Elle correspond à la proportion de patients pris en charge, à un moment donné, pour une pathologie (ou traitement chronique ou épisode de soins) dans une population (en %). La population utilisée ici est celle de la cartographie des pathologies et des dépenses de l'Assurance Maladie.
+
+### Qu’est-ce que la population de la cartographie des pathologies et des dépenses de l’Assurance Maladie ?
+
+La population de la cartographie recense l’ensemble des bénéficiaires de l’assurance maladie obligatoire, quel que soit leur régime d’affiliation :
+
+  * ayant bénéficié d'au moins une prestation dans l’année (soins de médecins, soins infirmiers ou de kinésithérapie, médicament, biologie, transports etc.) ;
+  * et/ou ayant séjourné au moins une fois dans un établissement de santé public ou privé dans l’année (séjours en médecine, chirurgie, obstétrique, psychiatrie, soins de suite et de réadaptation, actes et consultations externes ou hospitalisation à domicile).
+
+
+
+Elle rassemble en 2024, 67,4 millions de bénéficiaires de l'ensemble des régimes d'assurance maladie, ayant eu recours à des soins remboursés. Cette population est utilisée par la Caisse nationale de l’assurance Maladie (Cnam) pour réaliser de nombreuses études et produire des données sur les pathologies et les dépenses de l’Assurance Maladie.
+
+Pour plus d'informations, consulter la page [Méthode](https://observatoirepathologies-cnam.opendatasoft.com/pages/methode/) du site.
+
+### Secret statistique :
+
+Par respect pour le secret statistique (loi du 7 juin 1951) et afin que l’identification directe ou indirecte des individus soit impossible, aucune information sur les effectifs n'est communiquée lorsque le nombre de patients pris en charge est inférieur à 11. La valeur de l'indicateur est alors indiqué par la variable « NS » (non significatif) dans le jeu de données et fixée à ""Non significatif"" dans les représentations graphiques.
+
+### Mise à jour du 11/07/2025 : actualisation des données de 2015 à 2023
+
+L’historique des données a été mis à jour :
+
+  * les données de **2015 à 2022 ont été actualisées**
+  * les données de **2023 sont maintenant disponibles**
+
+
+
+Cette nouvelle version des données (juillet 2025) remplace ainsi la précédente (datant de juillet 2024).
+
+### 
+
+### Mise à jour des données :
+
+Les données proposées en téléchargement dans l’onglet « Export » sont mises à jour chaque année (données de la France entière de 2015 à 2023).","2025-12-15T16:10:45.030000+00:00","Caisse nationale de l'Assurance Maladie","Données sur les pathologies"
+"Morbidités hospitalières","Il s'agit des données sur les hospitalisations en court séjour survenues entre 2018 et 2022.
+
+(Via l'application [Odin](https://odin-dataviz-drees.sante.gouv.fr/digdash_dashboard_dataviz_drees/?defaultPage=Morbidit%C3%A9_Hospitali%C3%A8re_Tableau_1_D%C3%A9partements&user=dataviz_sante&pass=dataviz_sante#7)) ","available","https://www.data.gouv.fr/datasets/morbidite-hospitaliere","Morbidité hospitalière","Il s'agit des données sur les hospitalisations en court séjour survenues entre 2018 et 2022. Ces tableaux ont été réalisés à partir des données hospitalières (PMSI MCO) produites par l’Agence technique de l’information sur l’hospitalisation (ATIH). Ils complètent la série de données annuelles mises à disposition sur le site data.Drees depuis 2010, pouvant être déclinés au niveau national, régional et départemental.   
+
+
+**Consulter la Dataviz** : [Morbidité Hospitalière](https://odin.sante.gouv.fr/dataviz_drees/?defaultPage=Morbidit%C3%A9_Hospitali%C3%A8re_Tableau_1_D%C3%A9partements&user=dataviz_sante&pass=dataviz_sante#7)
+
+La Dataviz propose 3 tableaux déclinant les données à l’échelle des départements, des régions et de la France :
+
+  * Répartition des séjours dans les établissements de soins de courte durée (MCO) selon le sexe, l’âge des patients et la pathologie traitée
+  * Répartition des séjours dans les établissements de soins de courte durée (MCO) selon la durée du séjour et la pathologie traitée et durée moyenne de séjour
+  * Taux de recours aux établissements de soins de courte durée (MCO) selon le sexe, l’âge des patients et la pathologie traitée 
+
+
+
+Les données de ces tableaux sont disponibles en téléchargement direct aux formats csv, json ou parquet. Chaque tableau est consolidé dans un fichier unique qui regroupe les informations des départements, régions, et de la France.","2024-09-18T12:52:33.516000+00:00","Ministère des Solidarités et de la Santé","Données sur les pathologies"
+"Découpage des quartiers prioritaires de la ville","Les quartiers prioritaires de la politique de la ville sont des territoires d'intervention de l’État et des collectivités territoriales dans l’objectif commun de réduire les écarts de développement entre les quartiers défavorisés et leurs unités urbaines.
+
+Ils ont été identifiés selon un critère unique, celui du revenu par habitant. ","available","https://www.data.gouv.fr/datasets/quartiers-prioritaires-de-la-politique-de-la-ville-qpv","Quartiers prioritaires de la politique de la ville (QPV)","La loi de programmation pour la Ville et la cohésion urbaine du 21 février 2014 prévoit, dans son article 5, les modalités de réforme de la géographie prioritaire de la politique de la ville. Ces périmètres viennent se substituer aux zones urbaines sensibles (Zus) et aux quartiers en contrat urbain de cohésion sociale (Cucs) à compter du 1er janvier 2015.
+
+La première génération de quartiers prioritaires en vigueur du 01 janvier 2015 au 31 décembre 2023 a été définie par [le décret n° 2014-1750 du 30 décembre 2014](https://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000030007934\&categorieLien=id) pour la métropole et par [le décret n° 2014-1751 du 30 décembre 2014](https://www.legifrance.gouv.fr/eli/decret/2014/12/30/2014-1751/jo/texte) pour les départements d'outre-mer, à Saint-Martin et en Polynésie française.
+
+Pour s'adapter à l'évolution des territoires, une actualisation de la géographie prioritaire a été menée dans l'esprit de la loi de programmation pour la ville et la cohésion urbaine de 2014.
+
+SIGVILLE est le site de référence de la géographie prioritaire : [https://sig.ville.gouv.fr](https://sig.ville.gouv.fr/)
+
+ACTUALISATION DES QUARTIERS PRIORITAIRES
+
+FRANCE HEXAGONALE
+
+Une nouvelle génération de quartiers prioritaires entre en vigueur au 01 janvier 2024 pour la France métropolitaine par [le décret n° 2023-1314 du 28 décembre 2023](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000048707389).
+
+Le [décret procédant à des corrections au sein de la liste des quartiers prioritaires](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049964604) a été publié au JO du 14 juillet 2024 . La liste des quartiers reste inchangée, il s’agit uniquement d’ajustements orthographiques sur les noms des quartiers et leur rattachement à leur commune.
+
+OUTRE-MER
+
+Une nouvelle génération de quartiers prioritaires entre en vigueur au 01 janvier 2025 pour les Outre-mer, par [le décret n° 2024-1212 du 27 décembre 2024 modifiant la liste des quartiers prioritaires de la politique de la ville dans les collectivités régies par l'article 73 de la Constitution, à Saint-Martin et en Polynésie française](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000050853230)
+
+Depuis le 30 décembre 2025, le [décret n° 2025-1435 du 30 décembre 2025 modifiant le décret n° 2024-1212 du 27 décembre 2024 modifiant la liste des quartiers prioritaires de la politique de la ville dans les collectivités régies par l'article 73 de la Constitution, à Saint-Martin et en Polynésie française](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053230323), a classé l’ensemble du territoire de Mayotte en quartier prioritaire : chacune des 17 communes est considérée comme un quartier prioritaire de la politique de la ville.
+
+IDENTIFICATION DES QUARTIERS PRIORITAIRES
+
+Pour la nouvelle génération de quartiers prioritaires, le travail a été conduit par les préfectures de département, avec une concertation locale, en s'appuyant sur l'ANCT et la mise à disposition de données par l'Insee.
+
+La nouvelle numérotation de QP 2024 suit le format « QNXXXYYZ » où
+XX =code département, YY = numéro d’ordre et Z est une lettre.
+N = nouveau QP, entrant dans la géographie prioritaire en 2024
+M = QP pré existant en 2015 avec contour modifié dans la géographie prioritaire en 2024 (possible fusion ou scission de QP 2015)
+I = QP pré existant en 2015 avec contour très similaire à celui de 2015
+
+C = depuis le 30 novembre 2025, une nouvelle numérotation a été instaurée à Mayotte : la lettre C désigne les quartiers prioritaires de ce territoire. Exemple 'QN97663C"" pour le QP de M'Tsangamouji.
+
+Attention : les fichiers csv sont à ouvrir en indiquant comme séparateur le "";"".
+
+Pour plus d’informations sur les territoires concernés par la politique de la ville vous pouvez consulter le [Système d'information géographique de la politique de la ville](https://sig.ville.gouv.fr/).
+
+JOURNAL DES MODIFICATIONS :
+
+6 février 2025 : publication des fichiers avec la nouvelle génération des quartiers prioritaires dans les départements et régions d'Outre-Mer
+
+15 janvier 2026 : modifications géographiques et attributaires pour l'ensemble du département de Mayotte. Chaque commune du territoire devient un quartier prioritaire.
+","2026-01-16T14:48:23.114000+00:00","Agence nationale de la cohésion des territoires","Données socles utiles aux analyses"
+"Contours IRIS","L'IRIS constitue la brique de base en matière de diffusion de données infra-communales. Il doit respecter des critères géographiques et démographiques et avoir des contours identifiables sans ambigüité et stables dans le temps.
+
+Les communes d'au moins 10 000 habitants et une forte proportion des communes de 5 000 à 10 000 habitants sont découpées en IRIS. Ce découpage constitue une partition de leur territoire. La France compte environ 16 100 IRIS dont 650 dans les DOM.","available","https://www.data.gouv.fr/datasets/contours-iris-r-2","Contours... IRIS®","Coédition INSEE et IGN, Contours... IRIS® est un fond numérisé des îlots Iris définis par l'INSEE pour les besoins des recensements sur l'ensemble des communes de plus de 10 000 habitants et la plupart des communes de 5 000 à 10 000 habitants.
+
+Contours...IRIS® permet de cartographier les contours des Iris et de les intégrer dans un SIG. Ce produit permet de faire le lien entre les données cartographiques et les données statistiques de l’INSEE.","2026-01-05T00:00:00+00:00","Institut national de l'information géographique et forestière","Données socles utiles aux analyses"
+"Admin express","Ce jeu de données décrit le découpage administratif du territoire français (commune, arrondissement départemental, département, région...).","available","https://www.data.gouv.fr/datasets/admin-express-admin-express-cog-admin-express-cog-carto-admin-express-cog-carto-pe-admin-express-cog-carto-plus-pe","ADMIN EXPRESS, ADMIN EXPRESS COG, ADMIN EXPRESS COG CARTO, ADMIN EXPRESS COG CARTO PE, ADMIN EXPRESS COG CARTO PLUS PE","Les produits ADMIN EXPRESS, ADMIN EXPRESS COG, ADMIN EXPRESS COG CARTO, ADMIN EXPRESS COG CARTO PE, et ADMIN EXPRESS COG CARTOPLUS PE décrivent l'ensemble des informations administratives présentes dans la base de données interne de l'IGN sur le territoire métropolitain et les départements d'outre-mer à la date d'extraction des données. 
+
+ADMIN EXPRESS COG, ADMIN EXPRESS COG CARTO, ADMIN EXPRESS COG CARTO PE, ADMIN EXPRESS COG CARTOPLUS PE prennent en compte le COG (Code Officiel Géographique) de l’INSEE qui rassemble les codes et libellés des entités administratives y compris d'outre-mer au 1er janvier de l’année en cours.","2026-01-23T00:00:00+00:00","Institut national de l'information géographique et forestière","Données socles utiles aux analyses"
+"Indicateurs Cartosanté (Atlasanté)","Les données Cartosanté ont trait à l'offre et la demande de soins de premier recours et d'autres professions de santé.
+
+Ces données ne sont pas brutes, mais sont des **listes d’indicateurs territorialisés**, à différentes échelles. Vous trouverez surtout **des données à la commune**, très peu à l’infra-communal (au quartier ou à [l’IRIS](https://www.insee.fr/fr/metadonnees/definition/c1523)). Certains indicateurs ne sont disponibles qu’à l’échelle des régions ou des départements. La plupart des indicateurs sont calculés à partir des données du [Système National des Données de Santé (SNDS)](https://www.snds.gouv.fr/SNDS/Accueil). Ils sont soumis au secret statistique (par exemple, les indicateurs avec moins de 11 bénéficiaires sont cachés sur Cartosanté).","available","/datasets/67d2eed93872dba3e719d2bd",,,,,"Données sur l'offre et la demande de soins"
+"Indicateurs Sirsé (Atlasanté)","Les données Sirsé ont trait à l'état de santé et certains déterminants sociaux de la santé.
+
+Ces données ne sont pas brutes, mais sont des **listes d’indicateurs territorialisés**, à différentes échelles. Vous trouverez surtout **des données à la commune**, très peu à l’infra-communal (au quartier ou à [l’IRIS](https://www.insee.fr/fr/metadonnees/definition/c1523)). Certains indicateurs ne sont disponibles qu’à l’échelle des régions ou des départements. La plupart des indicateurs sont calculés à partir des données du [Système National des Données de Santé (SNDS)](https://www.snds.gouv.fr/SNDS/Accueil). Ils sont soumis au secret statistique.","available","/datasets/67d2ea5f9e83a012dbee09b2",,,,,"Données sur les déterminants sociaux de la santé"
+"Annuaire Santé (RPPS)","L’Annuaire Santé rassemble les données d’identification des professionnels intervenant dans le système de Santé et de leurs structures, issues des référentiels nationaux RPPS et FINESS.","url available","https://annuaire.sante.fr/web/site-pro/extractions-publiques",,,,,"Données sur l'offre et la demande de soins"
+"Indicateurs Géodes (Santé Publique France)","Les données Géodes ont trait aux indicateurs épidémiologiques produits par Santé Publique France.
+
+Ces données ne sont pas brutes, mais sont des **listes d’indicateurs territorialisés**, à différentes échelles. Vous trouverez surtout **des données à la commune**, très peu à l’infra-communal (au quartier ou à [l’IRIS](https://www.insee.fr/fr/metadonnees/definition/c1523)). Certains indicateurs ne sont disponibles qu’à l’échelle des régions ou des départements. La plupart des indicateurs sont calculés à partir des données du [Système National des Données de Santé (SNDS)](https://www.snds.gouv.fr/SNDS/Accueil). Ils sont soumis au secret statistique.","url available","https://geodes.santepubliquefrance.fr/#c=article&page=P005",,,,,"Données sur les déterminants sociaux de la santé"
+"Données sur l'emploi et les CSP","Ces données sont issues des statistiques locales de l'INSEE.","url available","https://statistiques-locales.insee.fr/#c=indicator&i=rp.pt_emplt_cs6&s=2021&t=A01&view=map1",,,,,"Données sur les déterminants sociaux de la santé"
+"Indice de défavorisation sociale (FDep) à l'échelle de l'IRIS - Inserm","-","url available","https://catalogue.atlasante.fr/geonetwork/srv/fre/catalog.search#/metadata/8ba3a966-fda5-4147-ba45-f6f9fd899c09",,,,,"Données sur les déterminants sociaux de la santé"
+"Causes médicales de décès CépiDC-INSERM","-","url available","https://opendata-cepidc.inserm.fr/",,,,,"Données sur la mortalité"
+"Disparités territoriales de mortalité","Ces données sont produites et proposées par l'INSEE.","url available","https://www.insee.fr/fr/statistiques/5039901?sommaire=5040030#figure2_radio2 ",,,,,"Données sur la mortalité"
+"Tables de mortalité par catégorie sociale et par diplôme ","Ces données sont produites et proposées par l'INSEE.","url available","https://www.insee.fr/fr/statistiques/1893092?sommaire=1893101",,,,,"Données sur la mortalité"
+"Données du catalogue Green Data For Health","Le Green Data for Health est un espace commun des données environnementales pour la santé.
+
+Il a vocation à rassembler des jeux de données environnementaux destinés à un usage en santé-environnement.","url available","https://gd4h.ecologie.gouv.fr/catalogue",,,,,"Données environnementales pour la santé"
