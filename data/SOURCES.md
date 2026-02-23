@@ -50,3 +50,6 @@
 - Les données INSEE sont au niveau IRIS quand disponible
 - Les fichiers bruts ne sont pas versionnés (voir .gitignore)
 
+## 📝 Notes pour la mortalité
+
+- Taux standardisés calculés sur la population France RP 2022.
