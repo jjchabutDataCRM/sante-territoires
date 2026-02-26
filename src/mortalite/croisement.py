@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
+
+st.set_page_config(layout="wide")
 
 DEPARTEMENTS_OCCITANIE = [
     "09","11","12","30","31","32","34",
@@ -35,11 +38,27 @@ FRAMBOISE = "#A13D63"
 
 @st.cache_data
 def load_urbanite():
-    return pd.read_csv("data/processed/urbanite.csv")
+    BASE_DIR = Path(__file__).resolve().parents[2]
+    DATA_PROCESSED = BASE_DIR / "data" / "processed"
+    path = DATA_PROCESSED / "urbanite.csv"
+
+    if not path.exists():
+        st.error(f"Fichier manquant : {path.name}")
+        st.stop()
+
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_mortalite():
-    df = pd.read_csv("data/processed/mortalite_2023_standardise_all.csv")
+    BASE_DIR = Path(__file__).resolve().parents[2]
+    DATA_PROCESSED = BASE_DIR / "data" / "processed"
+    path = DATA_PROCESSED / "mortalite_2023_standardise_all.csv"
+
+    if not path.exists():
+        st.error(f"Fichier manquant : {path.name}")
+        st.stop()
+
+    df = pd.read_csv(path)
 
     df = (
         df[df["annee"] == 2023]
@@ -135,10 +154,9 @@ def render_croisement():
 
     df_occ = df_merge[df_merge["departement"].isin(DEPARTEMENTS_OCCITANIE)]
 
-    df_occ["departement_nom"] = (
-    df_occ["departement"]
-    .map(DEPARTEMENTS_NOMS)
-    )
+    df_occ = df_occ.copy()
+
+    df_occ["departement_nom"] = df_occ["departement"].map(DEPARTEMENTS_NOMS)
 
     fig_bar = px.bar(
     df_occ.sort_values("taux_total"),

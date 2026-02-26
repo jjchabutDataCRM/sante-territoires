@@ -1,7 +1,10 @@
+from pathlib import Path
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 #from services.bigquery_client import run_query
+
+st.set_page_config(layout="wide")
 
 DEPARTEMENTS_OCCITANIE = [
     "09","11","12","30","31","32","34",
@@ -45,7 +48,17 @@ def get_intensite_globale():
     # ---------------------------
     # Chargement local
     # ---------------------------
-    df = pd.read_csv("data/processed/mortalite_2023_standardise_all.csv")
+
+    BASE_DIR = Path(__file__).resolve().parents[2]
+    DATA_PROCESSED = BASE_DIR / "data" / "processed"
+
+    path = DATA_PROCESSED / "mortalite_2023_standardise_all.csv"
+
+    if not path.exists():
+        st.error(f"Fichier manquant : {path.name}")
+        st.stop()
+
+    df = pd.read_csv(path)
 
     df = (
         df[df["annee"] == 2023]

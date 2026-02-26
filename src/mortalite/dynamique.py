@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
+
+st.set_page_config(layout="wide")
 
 DEPARTEMENTS_OCCITANIE = [
     "09","11","12","30","31","32","34",
@@ -51,11 +54,27 @@ def style_fig(fig):
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("data/processed/toutes_causes.csv")
+    BASE_DIR = Path(__file__).resolve().parents[2]
+    DATA_PROCESSED = BASE_DIR / "data" / "processed"
+    path = DATA_PROCESSED / "toutes_causes.csv"
+
+    if not path.exists():
+        st.error(f"Fichier manquant : {path.name}")
+        st.stop()
+
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_detail():
-    return pd.read_csv("data/processed/mortalite_standardise_2010-2023.csv")
+    BASE_DIR = Path(__file__).resolve().parents[2]
+    DATA_PROCESSED = BASE_DIR / "data" / "processed"
+    path = DATA_PROCESSED / "mortalite_standardise_2010-2023.csv"
+
+    if not path.exists():
+        st.error(f"Fichier manquant : {path.name}")
+        st.stop()
+
+    return pd.read_csv(path)
 
 # ========================
 # AXE 2 — DYNAMIQUE
