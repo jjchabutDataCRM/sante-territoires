@@ -23,6 +23,16 @@ DEPARTEMENTS_NOMS = {
     "82": "Tarn-et-Garonne"
 }
 
+# ========================
+# PALETTE COULEURS
+# ========================
+
+BLEU_NUIT = "#1F2A44"
+PRUNE = "#6C3B8E"
+TERRACOTTA = "#C05A2B"
+SABLE = "#D8A47F"
+FRAMBOISE = "#A13D63"
+
 def style_fig(fig):
     fig.update_layout(
         template="simple_white",
@@ -59,9 +69,8 @@ def render_dynamique():
     st.title("📈 Dynamique temporelle 2010–2023")
 
     st.markdown("""
-    Cette section analyse l’évolution des taux standardisés de mortalité
-    entre 2010 et 2023 afin d’identifier les tendances longues,
-    les ruptures et les éventuelles divergences territoriales.
+    Cet axe permet d’identifier les tendances de long terme, 
+    les ruptures conjoncturelles et les écarts structurels.
     """)
 
     st.divider()
@@ -108,11 +117,19 @@ def render_dynamique():
         y="valeur",
         color="territoire",
         template="simple_white",
-        color_discrete_sequence=["#2E5AF9", "#E4572E"],
+        color_discrete_sequence=[PRUNE, BLEU_NUIT],
         labels={
             "valeur": "Taux standardisé (pour 100 000)",
             "annee": "Année"
         }
+    )
+
+    fig.add_annotation(
+    x=2020,
+    y=df_plot["valeur"].max(),
+    text="Choc COVID",
+    showarrow=True,
+    arrowhead=2
     )
 
     fig = style_fig(fig)
@@ -120,59 +137,10 @@ def render_dynamique():
     st.plotly_chart(fig, use_container_width=True)
 
     st.info(
-        "L’Occitanie présente une tendance à la baisse plus marquée que la France, "
-        "notamment entre 2010 et 2015. Cependant, les deux territoires connaissent une hausse significative en 2020–2021, "
-        "cohérente avec le choc sanitaire de la pandémie de COVID-19."
+    "La mortalité diminue progressivement jusqu’en 2019, "
+    "avec une rupture nette en 2020 liée au choc sanitaire. "
+    "L’Occitanie évolue parallèlement à la France, sans divergence structurelle."
     )
-
-    st.divider()
-
-    # ----------------------
-    # Analyse du choc 2020 par département
-    # ----------------------
-
-    st.header("Amplitude du choc 2020 par département en Occitanie")
-
-    df_dept = df[
-        (df["cause"] == "Toutes causes") &
-        (df["sexe"] == "Tous sexes") &
-        (df["departement"].isin(DEPARTEMENTS_OCCITANIE))
-    ]
-
-    # moyenne 2015–2019
-    moy_pre = (
-        df_dept[df_dept["annee"].between(2015, 2019)]
-        .groupby("departement")["valeur"]
-        .mean()
-        .reset_index()
-        .rename(columns={"valeur": "moy_pre_covid"})
-    )
-
-    # valeur 2020
-    val_2020 = (
-        df_dept[df_dept["annee"] == 2020]
-        .groupby("departement")["valeur"]
-        .mean()
-        .reset_index()
-        .rename(columns={"valeur": "val_2020"})
-    )
-
-    df_choc = moy_pre.merge(val_2020, on="departement")
-    df_choc["ecart_2020"] = df_choc["val_2020"] - df_choc["moy_pre_covid"]
-    df_choc["departement_nom"] = df_choc["departement"].map(DEPARTEMENTS_NOMS)
-
-    fig_choc = px.bar(
-        df_choc.sort_values("ecart_2020", ascending=False),
-        x="departement_nom",
-        y="ecart_2020",
-        template="simple_white",
-        labels={
-            "departement_nom": "Département",
-            "ecart_2020": "Surmortalité 2020 vs 2015–2019"
-        }
-    )
-
-    st.plotly_chart(fig_choc, use_container_width=True)
 
     st.divider()
 
@@ -210,7 +178,7 @@ def render_dynamique():
         y="valeur",
         color="cause",
         template="simple_white",
-    color_discrete_sequence=["#4C78A8", "#F58518", "#54A24B"],
+    color_discrete_sequence=[FRAMBOISE, TERRACOTTA, SABLE],
     labels={
         "valeur": "Taux standardisé (pour 100 000)",
         "annee": "Année",
@@ -233,9 +201,9 @@ def render_dynamique():
     st.plotly_chart(fig_causes, use_container_width=True)
 
     st.info(
-        "Les maladies de l’appareil circulatoire présentent une baisse structurelle sur la période. "
-        "Les maladies respiratoires connaissent une hausse marquée en 2020–2021, "
-        "cohérente avec le choc sanitaire."
+    "Les maladies cardiovasculaires diminuent structurellement. "
+    "Les pathologies respiratoires présentent une rupture en 2020–2021. "
+    "Les tendances restent parallèles aux dynamiques nationales."
     )
 
     st.divider()
@@ -269,10 +237,10 @@ def render_dynamique():
         x="annee",
         y="valeur",
         color="sexe",
-        facet_row="cause",
-        markers=True,
-         template="simple_white",
-        color_discrete_sequence=["#3B82F6", "#EF4444"],
+        facet_col="cause",
+        height=450,
+        template="simple_white",
+        color_discrete_sequence=[PRUNE, TERRACOTTA],
         labels={
             "valeur": "Taux standardisé (pour 100 000)",
             "annee": "Année",
@@ -283,9 +251,9 @@ def render_dynamique():
 
     fig_sexe.update_traces(line=dict(width=3))
     fig_sexe.update_layout(
-        height=850,
+        height=450,
         font=dict(family="Inter, sans-serif", size=13),
-        margin=dict(l=20, r=120, t=40, b=20),
+        margin=dict(l=20, r=40, t=40, b=20),
         legend=dict(
             orientation="v",
             y=1,
@@ -300,8 +268,9 @@ def render_dynamique():
     st.plotly_chart(fig_sexe, use_container_width=True)
 
     st.info(
-        "Les hommes présentent des taux de mortalité plus élevés que les femmes pour les trois grandes causes, avec un écart particulièrement marqué pour les maladies de l’appareil circulatoire. "
-        "Cependant, les tendances temporelles sont similaires entre les sexes."
+    "Les hommes présentent des niveaux de mortalité supérieurs aux femmes, "
+    "avec un écart particulièrement marqué pour les maladies cardiovasculaires. "
+    "Ces écarts traduisent des dynamiques de genre complexes en matière de santé."
     )
 
     st.divider()

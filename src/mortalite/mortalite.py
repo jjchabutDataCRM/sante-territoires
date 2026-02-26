@@ -9,7 +9,7 @@ def render():
     tab1, tab2, tab3 = st.tabs([
         "📊 Diagnostic 2023",
         "📈 Dynamique 2010–2023",
-        "🔗 Croisement avec l'offre"
+        "⚖️ Déterminants territoriaux et mortalité"
     ])
 
     with tab1:

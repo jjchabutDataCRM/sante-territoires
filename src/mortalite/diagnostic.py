@@ -29,6 +29,16 @@ DEPARTEMENTS_NOMS = {
     "82": "Tarn-et-Garonne"
 }
 
+# ========================
+# PALETTE COULEURS
+# ========================
+
+BLEU_NUIT = "#1F2A44"
+PRUNE = "#6C3B8E"
+TERRACOTTA = "#C05A2B"
+SABLE = "#D8A47F"
+FRAMBOISE = "#A13D63"
+
 @st.cache_data
 def get_intensite_globale():
 
@@ -50,27 +60,6 @@ def get_intensite_globale():
     ).round(2)
 
     return df
-
-    # ---------------------------
-    # BigQuery (désactivé)
-    # ---------------------------
-    """
-    query = '''
-    SELECT
-        departement,
-        SUM(valeur) AS taux_total,
-        ROUND(
-            SUM(valeur) - AVG(SUM(valeur)) OVER(),
-            2
-        ) AS ecart_a_moyenne
-    FROM `sante-et-territoires.sante.mortalite_2023_standardise_all`
-    WHERE annee = 2023
-      AND sexe = 'Tous sexes'
-    GROUP BY departement
-    ORDER BY taux_total DESC
-    '''
-    return run_query(query)
-    """
 
 # ===============================
 # 2. Rendu Streamlit
@@ -97,8 +86,8 @@ def render_diagnostic():
     st.title("📊 Diagnostic territorial 2023")
 
     st.markdown("""
-    Le taux standardisé de mortalité constitue un indicateur synthétique
-    permettant d'identifier d'éventuels déséquilibres territoriaux.
+    Cet axe vise à situer l’Occitanie par rapport au niveau national 
+    et à identifier les éventuelles disparités internes entre départements.
     """)
 
     st.divider()
@@ -136,11 +125,15 @@ def render_diagnostic():
     # ---- Interprétation ----
     if ecart_reg < 0:
         st.info(
-            f"L’Occitanie se situe **{abs(round(ecart_reg,1))} points en dessous** de la moyenne nationale."
+            f"L’Occitanie présente un niveau de mortalité inférieur à la moyenne nationale "
+            f"({abs(round(ecart_reg,1))} points d’écart). "
+            "La région se situe donc dans une position globalement favorable."
         )
     else:
         st.warning(
-            f"L’Occitanie se situe **{round(ecart_reg,1)} points au-dessus** de la moyenne nationale."
+            f"L’Occitanie présente un niveau de mortalité supérieur à la moyenne nationale "
+            f"({round(ecart_reg,1)} points d’écart). "
+            "Ce différentiel interroge l’organisation territoriale de l’offre de soins."
         )
 
     st.divider()
@@ -154,12 +147,28 @@ def render_diagnostic():
     df_occitanie = df[df["departement"].isin(DEPARTEMENTS_OCCITANIE)]
     df_occitanie_sorted = df_occitanie.sort_values("taux_total")
 
+    # ----------------------
+    # Sélection dynamique d’un département
+    # ----------------------
+    departement_selectionne = st.selectbox(
+        "Choisir un département à analyser",
+        options=df_occitanie_sorted["departement_nom"].unique()
+    )
+
+    dept_row = df_occitanie_sorted[
+    df_occitanie_sorted["departement_nom"] == departement_selectionne
+]
+
+    val_dept = dept_row["taux_total"].values[0]
+
+
     fig_occ = px.bar(
         df_occitanie_sorted,
         x="taux_total",
         y="departement_nom",
         orientation="h",
         template="plotly_white",
+        color_discrete_sequence=[PRUNE],
         labels={
             "taux_total": "Décès pour 100 000 habitants",
             "departement_nom": "Département"
@@ -167,11 +176,20 @@ def render_diagnostic():
         title="Taux standardisé de mortalité – Occitanie 2023"
     )
 
+    # Ligne moyenne régionale
     fig_occ.add_vline(
         x=moyenne_occitanie,
-        line_color="black",
-        line_width=2
+        line_color=BLEU_NUIT,
+        line_width=3
     )
+
+    # Ligne département sélectionné
+    fig_occ.add_vline(
+    x=val_dept,
+    line_color=FRAMBOISE,
+    line_width=3,
+    line_dash="dash"
+)
 
     fig_occ.add_annotation(
     x=moyenne_occitanie,
@@ -179,80 +197,32 @@ def render_diagnostic():
     yref="paper",
     text="Moyenne régionale",
     showarrow=False,
-    font=dict(size=12, color="black"),
+    font=dict(size=12, color=TERRACOTTA),
     xanchor="center"
     )
+
+    fig_occ.update_layout(
+    font=dict(family="Inter, sans-serif", size=14),
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+    ecart_fr = val_dept - moyenne_france
+    ecart_occ = val_dept - moyenne_occitanie
+
+    st.markdown(f"""
+    ### 📍 Analyse du département sélectionné
+
+    **{round(val_dept,0)} décès / 100 000 habitants**
+
+    {'+' if ecart_fr > 0 else '–'}{abs(round(ecart_fr,0))} points vs France  
+    {'+' if ecart_occ > 0 else '–'}{abs(round(ecart_occ,0))} points vs Occitanie
+    """)
 
     st.plotly_chart(fig_occ, use_container_width=True)
 
     st.info(
-    "Les départements d’Occitanie présentent des écarts mesurés autour de la moyenne régionale. "
-    "La dispersion reste limitée, mais certains territoires se situent durablement au-dessus ou en dessous de la moyenne, "
-    "ce qui peut orienter la priorisation des politiques de prévention et d’accès aux soins."
-    )  
-
-    st.divider()
-
-    # ======================
-    # 3️⃣ FOCUS HAUTE-GARONNE
-    # ======================
-
-    st.header("3️⃣ Position de la Haute-Garonne en Occitanie")
-
-    df_occitanie = df[df["departement"].isin(DEPARTEMENTS_OCCITANIE)].copy()
-
-    # Marquer Haute-Garonne
-    df_occitanie["Focus"] = df_occitanie["departement"].apply(
-        lambda x: "Haute-Garonne" if x == "31" else "Autres départements"
-    )
-
-    fig_dot = px.scatter(
-        df_occitanie,
-        x="taux_total",
-        y=["Occitanie"] * len(df_occitanie),  # tous sur une seule ligne
-        color="Focus",
-        size=df_occitanie["Focus"].apply(lambda x: 14 if x == "Haute-Garonne" else 8),
-        color_discrete_map={
-            "Haute-Garonne": "#FF7F0E",
-            "Autres départements": "#B0B0B0"
-        },
-        template="plotly_white",
-        labels={"taux_total": "Décès pour 100 000 habitants"}
-    )
-
-    # Ligne moyenne régionale
-    fig_dot.add_vline(
-        x=moyenne_occitanie,
-        line_width=2,
-        line_color="black"
-    )
-
-    fig_dot.add_annotation(
-        x=moyenne_occitanie,
-        y=1,
-        yref="paper",
-        text="Moyenne régionale",
-        showarrow=False
-    )
-
-    fig_dot.update_yaxes(showticklabels=False)
-
-    st.plotly_chart(fig_dot, use_container_width=True)
-
-    val_31 = df[df["departement"] == "31"]["taux_total"].values[0]
-
-    ecart_fr = val_31 - moyenne_france
-    ecart_occ = val_31 - moyenne_occitanie
-
-    direction_fr = "au-dessus" if ecart_fr > 0 else "en dessous"
-    direction_occ = "au-dessus" if ecart_occ > 0 else "en dessous"
-
-    st.info(f"La Haute-Garonne présente un taux de **{round(val_31,1)} décès pour 100 000 habitants**.")
-
-    st.markdown(f"""
-    • Soit **{abs(round(ecart_fr,1))} décès pour 100 000 habitants {direction_fr}** de la moyenne nationale  
-    • Et **{abs(round(ecart_occ,1))} décès pour 100 000 habitants {direction_occ}** de la moyenne régionale
-    """)
+    "Les écarts restent modérés, mais certains départements se distinguent durablement de la moyenne régionale."
+    ) 
 
     st.divider()
 
