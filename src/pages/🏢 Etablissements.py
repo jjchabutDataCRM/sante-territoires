@@ -1,17 +1,21 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/jjchabutDataCRM/sante-territoires/main/src/data/"
+
 
 
 st.set_page_config(layout="wide", page_title="Dashboard Santé Occitanie")
 
 # ─── CHARGEMENT DONNÉES ───────────────────────────────────────────
-df = pd.read_csv("data/finess_occitanie2.csv", dtype={"departement": str})
-df_distances = pd.read_csv("data/distances_communes_urgence_occitanie.csv")
-df_communes = pd.read_csv("data/communes-france-2025.csv", sep=",", encoding="utf-8")
+df = pd.read_csv(url+"finess_occitanie2.csv", dtype={"departement": str})
+df_distances = pd.read_csv(url+"distances_communes_urgence_occitanie.csv")
+df_communes = pd.read_csv(url+"communes-france-2025.csv", sep=",", encoding="utf-8")
 df_communes_occitanie = df_communes[df_communes['reg_nom'] == 'Occitanie']
 df_urgences = df[df['libelle activite'].str.contains("urgence", case=False, na=False)]
-df_join = pd.read_csv("data/finess_occitanie_join.csv")
+df_join = pd.read_csv(url+"finess_occitanie_join.csv")
 df['longitude'] = df['longitude'].astype(float)
 df['latitude'] = df['latitude'].astype(float)
 #Sélectionne uniquement les données de la métropole de Toulouse
@@ -20,13 +24,137 @@ df_cc = df_join[df_join['epci_nom'] == 'CC Pyrénées Audoises']
 
 
 # ─── ONGLET PRINCIPAL ─────────────────────────────────────────────
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🏥 Vue d’ensemble", "📍 Établissements", "🩺 Soins",  "🚑 Distances aux urgences", "🌇 Métropôle de Toulouse", "🐄 CC Pyrénées Audoises"
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["📌 KPI", "🏥 Vue d’ensemble", "📍 Établissements", "🩺 Soins",  "🚑 Distances aux urgences", "🌇 Métropôle de Toulouse", "🐄 CC Pyrénées Audoises"
 ])
 
 # =================================================================
 # 🟦 ONGLET 1 — KPI + TYPOLOGIES
 # =================================================================
 with tab1:
+    st.header("🏥 Les principaux indicateurs des établissements de santé en Occitanie")
+
+    # --- KPI de base ---
+    total_etabs = df['numero finess etablissement'].nunique()
+    nb_types = df['type d etablissements'].nunique()
+    nb_deps = df['departement'].nunique()
+    population_occitanie = df_communes_occitanie['population'].sum()
+    habitants_par_etab = population_occitanie / total_etabs
+
+    st.subheader("📌 Vue d’ensemble")
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Établissements recensés", f"{total_etabs}")
+    col2.metric("Population (millions)", "6.1")
+    col3.metric("Départements couverts", f"{nb_deps}")
+    col4.metric("Habitants par établissement", f"{habitants_par_etab:,.0f}")
+
+    # --- KPI comparatifs France ---
+    st.subheader("📊 Mise en perspective nationale")
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Part des établissements français", f"{round(total_etabs/102553*100, 2)} %")
+    col2.metric("Part de la population française", "9 %")
+    col3.metric("Départements en France", "106")
+    col4.metric("Habitants/établissement (France)", "673")
+
+    st.markdown(
+        """
+        ### 🧭 Interprétation  
+        L’Occitanie apparaît comme un territoire **bien doté en établissements de santé**, 
+        avec un ratio habitants/établissement plus favorable que la moyenne nationale.
+        """
+    )
+
+    # --- Typologie des établissements ---
+    st.subheader("🏷️ Répartition par typologie")
+
+    table_typo = (
+        df.groupby('type d etablissements')
+          .agg(nb_etablissements=('numero finess etablissement', 'count'))
+          .reset_index()
+    )
+    table_typo['pourcentage'] = (table_typo['nb_etablissements'] / total_etabs * 100).round(2)
+    table_typo = table_typo.sort_values('nb_etablissements', ascending=False)
+
+    fig_typo = px.bar(
+        table_typo,
+        x='type d etablissements',
+        y='nb_etablissements',
+        title="Nombre d'établissements par typologie",
+        labels={'type d etablissements': 'Typologie', 'nb_etablissements': 'Nombre'},
+        color='nb_etablissements',
+        color_continuous_scale='Blues'
+    )
+    st.plotly_chart(fig_typo, use_container_width=True, key="fig_typo")
+
+    # --- Distances aux urgences ---
+    st.header("🚑 Analyse des distances aux services d’urgences")
+
+    df_dist = df_distances.copy()
+    distance_moyenne = df_dist["distance_urgence_km"].mean()
+    distance_max = df_dist["distance_urgence_km"].max()
+
+    col1, col2 = st.columns(2)
+    col1.metric("Distance moyenne", f"{distance_moyenne:.1f} km")
+    col2.metric("Distance maximale", f"{distance_max:.1f} km")
+
+    st.subheader("📍 Distance moyenne selon la densité de population")
+
+    distance_par_dep = (
+        df_dist
+        .groupby('grille_densite_texte')['distance_urgence_km']
+        .mean()
+        .reset_index()
+        .sort_values('distance_urgence_km', ascending=False)
+    )
+
+    st.dataframe(distance_par_dep, use_container_width=True, hide_index=True)
+
+    st.markdown(
+        """
+        ### 🔎 Points clés  
+        - Le seuil critique de **30 minutes d’accès** est un repère important en santé publique.  
+        - Les zones **rurales** sont les plus exposées à un risque d’éloignement des services d’urgence.  
+        - Cette analyse permet d’identifier les territoires où un renforcement de l’offre pourrait être prioritaire.
+        """
+    )
+    st.header("Carte des communes et des centres d’urgence")
+
+    # --- Carte Plotly ---
+    fig = px.scatter_map(
+        df_distances,
+        lat="latitude_centre",
+        lon="longitude_centre",
+        hover_name="nom_standard",
+        hover_data={"dep_nom": True, "distance_urgence_km": True},
+        color="distance_urgence_km",   # 🔥 coloration selon la distance
+        color_continuous_scale="Viridis",  # ou "Turbo", "Plasma", "Inferno"
+
+        zoom=6,
+        height=700
+    )
+
+    # Ajouter les centres d’urgence en rouge
+    fig.add_scattermap(
+        lat=df_urgences["latitude"],
+        lon=df_urgences["longitude"],
+        mode="markers",
+        marker=dict(size=10, color="red"),
+        name="Centres d'urgence",
+        hovertext=df_urgences["raison_sociale"]
+    )
+
+    fig.update_layout(
+        map_style="open-street-map",
+        margin={"r":0, "t":0, "l":0, "b":0}
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+# =================================================================
+# 🟦 ONGLET 2 — KPI + TYPOLOGIES
+# =================================================================
+with tab2:
     st.header("Vue d’ensemble des établissements de santé en Occitanie")
 
     # --- KPI ---
@@ -38,43 +166,53 @@ with tab1:
     col1.metric("Établissements recensés", f"{total_etabs}")
     col2.metric("Types d’établissements", f"{nb_types}")
     col3.metric("Départements couverts", f"{nb_deps}")
-    col4.metric("Nb de personnes par établissement", f"{df_communes_occitanie['population'].sum()/df['numero finess etablissement'].nunique(): .0f}")
+    col4.metric("Nb d'habitants par établissement", f"{df_communes_occitanie['population'].sum()/df['numero finess etablissement'].nunique(): .0f}")
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Établissements recensés en France", f"102553")
     col2.metric("Types d’établissements", f"{nb_types}")
-    col3.metric("Départements couverts en France", f"106")
-    col4.metric("Nb de personnes par établissement en France", f"673")
+    col3.metric("Départements en France", f"106")
+    col4.metric("Nb d'habitants par établissement en France", f"673")
 
     st.markdown(f"""
                 ### 📍 Informations clés
     L'occitanie représente {round(total_etabs/102553*100, 2)} % des établissements de santé en France.
-    Avec une population d'environ {df_communes_occitanie['population'].sum():,} habitants, soit 11,47% de la population française.Cela correspond à environ {round(df_communes_occitanie['population'].sum()/total_etabs):,} personnes par établissement.""")
+    Avec une population d'environ {df_communes_occitanie['population'].sum():,} habitants, soit 9% de la population française.Cela correspond à environ {round(df_communes_occitanie['population'].sum()/total_etabs):,} personnes par établissement.""")
     st.subheader("Typologie des établissements")
 
-    table_typo = (
+    table_typo2 = (
         df.groupby('type d etablissements')
           .agg(nb_etablissements=('numero finess etablissement', 'count'))
           .reset_index()
     )
-    table_typo['pourcentage'] = (table_typo['nb_etablissements'] / total_etabs * 100).round(2)
-    table_typo = table_typo.sort_values('nb_etablissements', ascending=False)
 
-    st.dataframe(table_typo, use_container_width=True, hide_index=True)
+    table_typo2['pourcentage'] = (table_typo['nb_etablissements'] / total_etabs * 100).round(2)
+    table_typo2 = table_typo.sort_values('nb_etablissements', ascending=False)
 
-    fig_typo = px.bar(
-        table_typo,
+    # Ajout d’un indicateur visuel pour les 3 premiers
+
+    table_typo2['Classement'] = ""
+    table_typo2.loc[table_typo.index[0], 'Classement'] = "🥇 TOP 1"
+    table_typo2.loc[table_typo.index[1], 'Classement'] = "🥈 TOP 2"
+    table_typo2.loc[table_typo.index[2], 'Classement'] = "🥉 TOP 3"
+
+    st.dataframe(table_typo2, use_container_width=True, hide_index=True)
+
+
+
+    fig_typo2 = px.bar(
+        table_typo2,
         x='type d etablissements',
         y='nb_etablissements',
         title="Nombre d'établissements par typologie",
         labels={'type d etablissements': 'Typologie', 'nb_etablissements': 'Nombre'},
     )
-    st.plotly_chart(fig_typo, use_container_width=True)
+    st.plotly_chart(fig_typo2, use_container_width=True, key="graph2")
 
 # =================================================================
-# 🟩 ONGLET 2 — CARTE PAR TYPE D'ÉTABLISSEMENT
+# 🟩 ONGLET 3 — CARTE PAR TYPE D'ÉTABLISSEMENT
 # =================================================================
-with tab2:
+with tab3:
     st.header("Carte interactive des établissements de santé")
 
     groupes = sorted(df['type d etablissements'].dropna().unique())
@@ -131,9 +269,9 @@ with tab2:
     st.plotly_chart(fig, use_container_width=True)
 
 # =================================================================
-# 🟧 ONGLET 3 — CARTE PAR TYPE DE SOIN
+# 🟧 ONGLET 4 — CARTE PAR TYPE DE SOIN
 # =================================================================
-with tab3:
+with tab4:
     st.header("Carte interactive des soins de santé")
 
     # --- KPI ---
@@ -199,10 +337,10 @@ with tab3:
     st.plotly_chart(fig2, use_container_width=True)
 
 # =================================================================
-# 🟧 ONGLET 4 — SERVICES D URGENCE
+# 🟧 ONGLET 5 — SERVICES D URGENCE
 # =================================================================
 
-with tab4:
+with tab5:
     st.header("Distance aux services d’urgence")
 
     # Charger les distances calculées dans le notebook
@@ -238,7 +376,7 @@ with tab4:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Distance moyenne par département")
+        st.subheader("Distance moyenne par département - Worst 5")
     # Distance moyenne par département
         
         distance_par_dep = (
@@ -246,7 +384,8 @@ with tab4:
             .groupby('dep_nom')['distance_urgence_km']
             .mean()
             .reset_index()
-            .sort_values('distance_urgence_km')
+            .sort_values('distance_urgence_km', ascending=False)
+            .head(5)
         )
 
         st.dataframe(distance_par_dep, use_container_width=True, hide_index=True)
@@ -261,7 +400,7 @@ with tab4:
             .groupby('grille_densite_texte')['distance_urgence_km']
             .mean()
             .reset_index()
-            .sort_values('distance_urgence_km')
+            .sort_values('distance_urgence_km', ascending=False)
         )
 
   
@@ -274,7 +413,7 @@ with tab4:
     # ───────────────────────────────────────────────
     #  Histogramme lissé (density) — sans SciPy
     # ───────────────────────────────────────────────
-    st.subheader("Distribution lissée (density)")
+    st.subheader("Distribution lissée des communes")
 
     fig_density = px.histogram(
         df_dist,
@@ -282,7 +421,7 @@ with tab4:
         nbins=40,
         histnorm="density",
         opacity=0.6,
-        title="Distribution lissée des distances aux urgences",
+        title="Distribution lissée des distances aux urgences par commune",
         labels={"distance_urgence_km": "Distance (km)"},
         marginal="box"  # ajoute un boxplot au-dessus
     )
@@ -320,15 +459,15 @@ with tab4:
         margin={"r":0, "t":0, "l":0, "b":0}
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key=2)
 
 
 
 # =================================================================
-# 🟧 ONGLET 5 — TOULOUSE
+# 🟧 ONGLET 6 — TOULOUSE
 # =================================================================
 
-with tab5:
+with tab6:
     st.header("Métropôle de Toulouse")
     df_communes_met_toulouse = df_communes_occitanie[df_communes_occitanie['epci_nom'] == 'Toulouse Métropole']
     print('Population de la métropole de Toulouse :', df_communes_met_toulouse['population'].sum())
@@ -366,8 +505,8 @@ with tab5:
         labels={'type d etablissements': 'Typologie', 'nb_etablissements': 'Nombre'},
     )
     st.plotly_chart(fig_typo, use_container_width=True)
-    # --- Carte interactive des établissements de Toulouse ---
-    
+
+    #carte filtres
     groupes_toulouse = sorted(df_toulouse['type d etablissements'].dropna().unique())
     communes = sorted(df_toulouse['nom_standard'].dropna().unique())
 
@@ -396,36 +535,36 @@ with tab5:
     if option_toutes_communes not in selection_communes:
         df_filtre_toulouse = df_filtre_toulouse[df_filtre_toulouse['nom_standard'].isin(selection_communes)]
 
-    # Centre de la carte je veux le
+        # Centre de la carte
     center_lat = 43.6045
     center_lon = 1.4440
-    zoom_level = 13
+    zoom_level = 10   # 👉 Ajuste ici (12 = ville, 13 = centre, 14 = rues)
 
-
-    fig = px.scatter_map(
+    fig = px.scatter_mapbox(
         df_filtre_toulouse,
         lat="latitude",
         lon="longitude",
         hover_name="raison_sociale",
         hover_data={"type d etablissements": True},
         color="type d etablissements",
-        zoom=6,
+        zoom=zoom_level,        # 👉 Utilisation du zoom dynamique
         height=650
     )
 
     fig.update_layout(
-        map_style="open-street-map",
-        map_center={"lat": center_lat, "lon": center_lon},
+        mapbox_style="open-street-map",
+        mapbox_center={"lat": center_lat, "lon": center_lon},  # 👉 Centre réel
         margin={"r":0, "t":0, "l":0, "b":0}
     )
 
     st.plotly_chart(fig, use_container_width=True)
 
+
 # =================================================================
-# 🟧 ONGLET 6 — CC PYRENEES AUDOISES
+# 🟧 ONGLET 7 — CC PYRENEES AUDOISES
 # =================================================================
 
-with tab6:
+with tab7:
     st.header("🐄 CC Pyrénées Audoises")
     df_communes_met_cc = df_communes_occitanie[df_communes_occitanie['epci_nom'] == 'CC Pyrénées Audoises']
     print('Population de la CC Pyrénées Audoises :', df_communes_met_cc['population'].sum())
@@ -493,28 +632,30 @@ with tab6:
     if option_toutes_communes_cc not in selection_communes:
         df_filtre_cc = df_filtre_cc[df_filtre_cc['nom_standard'].isin(selection_communes)]
 
-    # Centre de la carte je veux le
-    center_lat = df_communes_met_cc["latitude_centre"].mean()
-    center_lon = df_communes_met_cc["longitude_centre"].mean()
+      # Centre de la carte sur CC 
+    center_lat = 42.8777068
+    center_lon = 2.1847657
+    zoom_level = 10   # 👉 Ajuste ici (12 = ville, 13 = centre, 14 = rues)
 
-    zoom_level = 13
-
-
-    fig = px.scatter_map(
+    fig = px.scatter_mapbox(
         df_filtre_cc,
         lat="latitude",
         lon="longitude",
         hover_name="raison_sociale",
         hover_data={"type d etablissements": True},
         color="type d etablissements",
-        zoom=6,
+        size_max=30, #taille max des points
+        zoom=zoom_level,        # 👉 Utilisation du zoom dynamique
         height=650
     )
 
     fig.update_layout(
-        map_style="open-street-map",
-        map_center={"lat": center_lat, "lon": center_lon},
+        mapbox_style="open-street-map",
+        mapbox_center={"lat": center_lat, "lon": center_lon},  # 👉 Centre réel
         margin={"r":0, "t":0, "l":0, "b":0}
+    )
+    fig.update_traces(
+    marker={'size': 18}   # 👉 taille des ronds (augmente si tu veux)
     )
 
     st.plotly_chart(fig, use_container_width=True)
