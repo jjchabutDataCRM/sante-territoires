@@ -50,9 +50,12 @@ st.markdown(
 L'application est organisée en plusieurs sections accessibles via le menu latéral :
 
 - **🏠 Accueil** : Présentation générale du projet.  
-- **🏢 Etablissements** : Données relatives aux établissements de santé.  
-- **🤒 Pathologies** : Données relatives aux pathologies sur le territoire  
-- .........
+- **🩺 Diagnostic APL** : Données relatives aux professionnels de santé
+- **🏢 Etablissements** : Données relatives aux établissements de santé en 2026.  
+- **🤒 Pathologies** : Données relatives aux pathologies sur le territoire en 2015-2023
+- **🌆 Diagnostic qpv** : Les Quartiers prioritaires 
+- **☠️ Mortalite** : Données relatives à la mortalité 
+
 """
 )
 
