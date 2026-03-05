@@ -4,9 +4,21 @@ import matplotlib .pyplot as plt
 import seaborn as sns
 import streamlit as st
 import re
+from pathlib import Path # modif jj 
 
-data = pd.read_csv('data/pathologie_clean.csv',sep=",")
-data
+# Modif JJ : utiliser DATA_DIR pour accéder aux fichiers
+try:
+    BASE_DIR = Path(__file__).resolve().parent
+except NameError:
+    BASE_DIR = Path.cwd()
+
+ROOT = BASE_DIR.parent
+DATA_DIR = ROOT / "data"
+
+# data = pd.read_csv('data/pathologie_clean.csv',sep=",")
+data = pd.read_csv(DATA_DIR / 'pathologie_clean.csv',sep=",")
+# data
+
 # Création des onglets
 tab1, tab2, tab3 = st.tabs([
     "Top 5 des pathologies à haute prevalence- 2023",
