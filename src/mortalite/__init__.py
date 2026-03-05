@@ -1,1 +1,1 @@
-from .mortalite import render
+from .analyse_mortalite import render
