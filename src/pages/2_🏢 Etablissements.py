@@ -20,7 +20,7 @@ df_distances = pd.read_csv(DATA_DIR / "distances_communes_urgence_occitanie.csv"
 df_communes = pd.read_csv(DATA_DIR / "communes-france-2025.csv", sep=",", encoding="utf-8")
 df_communes_occitanie = df_communes[df_communes['reg_nom'] == 'Occitanie']
 df_urgences = df[df['libelle activite'].str.contains("urgence", case=False, na=False)]
-df_join = pd.read_csv("data/finess_occitanie_join.csv")
+df_join = pd.read_csv(DATA_DIR / "finess_occitanie_join.csv")
 df['longitude'] = df['longitude'].astype(float)
 df['latitude'] = df['latitude'].astype(float)
 #Sélectionne uniquement les données de la métropole de Toulouse
