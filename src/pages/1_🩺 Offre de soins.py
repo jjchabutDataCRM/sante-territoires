@@ -8,6 +8,7 @@ import numpy as np
 #import os
 import folium
 from streamlit_folium import st_folium
+import seaborn as sns
 
 # On essaie d'utiliser __file__, sinon on prend le dossier actuel
 try:
@@ -80,7 +81,7 @@ def load_data():
     comparaison['Ecart Toulouse / Pyr Audoises (%)'] = ((comparaison['Toulouse'] - comparaison['Pyrénées_Audoises']) / comparaison['Toulouse']) * 100
 
     
-    return comparaison
+    return df_occitanie, comparaison
 
 def get_weighted_means(dataframe, columns, weight_col='population'):
     """Calcule la moyenne pondérée pour une liste de colonnes."""
@@ -102,7 +103,7 @@ def get_weighted_means(dataframe, columns, weight_col='population'):
 st.title("📂 Analyse de l'Offre de Soins")
 
 # Création des 3 onglets
-tab_carte, tab_histo, tab_radar, tab_table, tab_methodo = st.tabs(["📍 Carte", "📊 APL", "🕸️ Multi Facteurs", "📋 Tableaux (détails)", "ℹ️ Méthodologie"])
+tab_carte, tab_histo, tab_radar, tab_table, tab_repartition, tab_methodo = st.tabs(["📍 Carte", "📊 APL", "🕸️ Multi Facteurs", "📋 Tableaux (détails)", "🗂️ Répartition", "ℹ️ Méthodologie"])
 
 # --- ONGLET 1 : CARTE ---
 with tab_carte:
@@ -196,7 +197,7 @@ with tab_carte:
 # --- ONGLET 2 : GRAPHIQUES ---
 with tab_histo:
     st.subheader("Acessibilioté aux soins")
-    df_comparaison = load_data()
+    df_occitanie, df_comparaison = load_data()
     
     # 1. Préparation des données 
     cols_etude = ['apl_medecins_std', 'apl_dentistes_std', 'apl_infirmiers_std', 
@@ -256,9 +257,9 @@ with tab_histo:
         )
 
 with tab_radar:
-    st.header("🕸️ Analyse Multidimensionnelle")
+    st.header("Analyse Multidimensionnelle")
     
-    comparaison = load_data()
+    df_occitanie, comparaison = load_data()
     
     st.write("Ce graphique radar permet de visualiser simultanément l'offre de soins et les indicateurs de risques.")
 
@@ -342,7 +343,7 @@ with tab_radar:
                 return f'color: {color}; font-weight: bold'
             return ''
 
-        st.subheader("📋 Tableau comparatif des écarts")
+        st.subheader("Tableau comparatif des écarts")
 
         # 1. Sélection des colonnes cibles
         subset_cols = [
@@ -354,9 +355,9 @@ with tab_radar:
         # 2. Application du style 
         
         noms_courts = {
-            "Ecart Toulouse / Région (%)": "Écart Toulouse\nvs Région",
-            "Ecart Pyr Audoises / Région (%)": "Écart Pyr. Aud.\nvs Région",
-            "Ecart Toulouse / Pyr Audoises (%)": "Écart Tls\nvs Pyr. Aud."
+            "Ecart Toulouse / Région (%)": "Tlse / Rég",
+            "Ecart Pyr Audoises / Région (%)": "Pyr.Aud./ Rég",
+            "Ecart Toulouse / Pyr Audoises (%)": "Tlse / Pyr.Aud."
         }
         
         styled_df = comparaison.style.map(color_negative_red, subset=subset_cols)\
@@ -369,7 +370,49 @@ with tab_radar:
                         for col in comparaison.columns
                     },
                      use_container_width=True)
+with tab_repartition:
+    df_occitanie, combinaison = load_data()
+    st.subheader("Profil de distribution des risques")
+    
+    df_violin = df_occitanie.melt(
+    value_vars=['tps_SU_SMUR_std', 'tx_mort_premature_std'],
+    var_name='Indicateur',
+    value_name='Z-Score'
+    )
 
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.violinplot(
+        data=df_violin, 
+        x='Z-Score', 
+        y='Indicateur', 
+        inner="quart", 
+        palette="Pastel1",
+        bw_adjust=.5,
+        ax=ax
+    )
+    ax.axvline(0, color='red', linestyle='--', alpha=0.5)
+    ax.set_yticklabels(['Temps SMUR', 'Mortalité Prématurée'])
+    ax.set_xlabel("Écart à la moyenne (Z-Score)")
+
+    st.pyplot(fig)
+
+    # --- 2. ANALYSE INTERPRÉTATIVE ---
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.info("**Analyse du Temps SMUR**")
+        st.write("""
+        - **Forte dispersion** : Le violon s'étire jusqu'à +5, indiquant des inégalités d'accès majeures.
+        - **La 'Traîne'** : La pointe fine à droite représente les communes en isolement extrême, comme les Pyrénées Audoises.
+        """)
+
+    with col2:
+        st.info("**Analyse de la Mortalité**")
+        st.write("""
+        - **Profil Multimodal** : Les multiples "bosses" suggèrent des groupes de communes avec des réalités de santé très différentes.
+        - **Plus compact** : Les écarts de mortalité sont moins extrêmes que les écarts de distance aux soins.
+        """)
+    
 with tab_methodo:
     st.subheader("Méthodologie")
     st.markdown('''
