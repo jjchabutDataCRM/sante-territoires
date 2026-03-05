@@ -62,3 +62,4 @@ tzdata==2025.3
 urllib3==2.6.3
 xyzservices==2025.11.0
 statsmodels==0.14.4
+scipy==1.11.4
