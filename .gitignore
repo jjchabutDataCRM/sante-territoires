@@ -6,10 +6,13 @@ __pycache__/
 *.egg-info/
 
 # Data (fichiers lourds)
-data/raw/*
-data/processed/*
-data/geo/*
+data/*
+
 !data/*/.gitkeep
+
+notebooks/private/*
+
+POC/*
 
 # Outputs
 outputs/figures/*
